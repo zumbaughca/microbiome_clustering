@@ -7,14 +7,14 @@ library(ape)
 library(fpc)
 source('R/helpers.R')
 
-df <- read_xlsx('microbial.xlsx', sheet = "genus.Percentages") %>%
+df <- readxl::read_xlsx('microbial.xlsx', sheet = "genus.Percentages") %>%
   slice_head(n = 138)
 data <- df[, 7:ncol(df)]
 data <- data[, -c(which(colSums(data) == 0))] / 100
 
 # Calculate Bray-Curtis dissimilarity matrix and run PCoA
-dissim <- vegdist(data, method = "bray")
-pca <- pcoa(dissim)
+dissim <- vegan::vegdist(data, method = "bray")
+pca <- ape::pcoa(dissim)
 
 # Get original data projections
 covar_std <- project_variables(pca, df[, 7:138]) %>%
@@ -93,7 +93,7 @@ plt <- ggplot(data = scores,
                    yend = PC2),
                alpha = 0.25,
                size = 0.2) +
-  geom_label_repel(data = covar_std / 100,
+  ggrepel::geom_label_repel(data = covar_std / 100,
              aes(label = rownames(covar_std)),
              nudge_x = 0.25,
              nudge_y = 0.15,

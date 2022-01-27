@@ -34,7 +34,7 @@ optimize_hclust <- function(matrix, tree) {
   optimum = list(clusters = 0,
                  ch_index = 0)
   for (i in 2:10) {
-    ch <- calinhara(matrix, cutree(tree, k = i))
+    ch <- fpc::calinhara(matrix, cutree(tree, k = i))
     if (ch > optimum$ch_index) {
       optimum$clusters = i
       optimum$ch_index = ch
